@@ -9,7 +9,7 @@ class Situation:
     def add_option(self, optionName, option):
         self.options.append((optionName, option))
 
-    def run(self):
+    def run(self, **kwargs):
         print(self.description)
         if len(self.options) == 0:
             return
@@ -18,8 +18,9 @@ class Situation:
             print(f'{i+1}: {self.options[i][0]}')
         choice = int(input()) - 1
         print()
-        decisionResult = self.options[choice][1].run()
-        decisionResult.run()
+        desc, decisionResult = self.options[choice][1].run(**kwargs)
+        print(desc)
+        decisionResult.run(**kwargs)
 
     def __str__(self):
         return self.name
@@ -34,23 +35,38 @@ class Decision:
 
 
 class RandomDecision(Decision):
-    def __init__(self, *args):
+    def __init__(self, *args, t=0, **kwargs):
         super().__init__(args)
         self.options = args
         self.probabilities = []
         total = 0
         for option in self.options:
-            total += option[0]
+            prob = option[0]
+            if callable(option[0]):
+                prob = option[0](t=t, **kwargs)
+            total += prob
             self.probabilities.append(total)
 
-    def run(self):
+    def run(self, **kwargs):
+        # Option Type
+        if any([callable(prob) for prob, _ in self.options]):
+            # Recalculate probabilities
+            self.probabilities = []
+            total = 0
+            for option in self.options:
+                prob = option[0]
+                if callable(option[0]):
+                    prob = option[0](**kwargs)
+                total += prob
+                self.probabilities.append(total)
+
         # Random number between 0 and 1
         random_number = random.random() * 100
 
         # Find the first probability that is greater than the random number
         for i in range(len(self.probabilities)):
             if random_number < self.probabilities[i]:
-                return self.options[i][1]
+                return self.options[i][1:2]
 
 
 if __name__ == '__main__':
