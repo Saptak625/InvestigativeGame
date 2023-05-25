@@ -31,11 +31,12 @@ class Situation:
 
 
 class Decision:
-    def __init__(self, option):
+    def __init__(self, option, desc = ''):
         self.options = option
+        self.desc = desc
 
     def run(self, **kwargs):
-        return '', self.options # Return no description and next node
+        return self.desc, self.options # Return no description and next node
     
     def __str__(self):
         return self.options
