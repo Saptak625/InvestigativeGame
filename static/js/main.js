@@ -90,6 +90,8 @@ async function startGame() {
   localStorage.setItem('max_t', max_t);
   localStorage.setItem('situation', situation);
   localStorage.setItem('decision', decision);
+  localStorage.setItem('desc', '');
+  localStorage.setItem('options', '');
 
   getNextSituation();
 }
