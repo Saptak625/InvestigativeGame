@@ -19,7 +19,9 @@ def form():
         t = int(data['t'])
         max_t = int(data['max_t'])
         situation = data['situation']
+        print(f'_{situation}_')
         if situation == 'null':
+            print('null')
             situation = get_all_situations()[0]
         else:
             decision = int(data['decision'])

@@ -79,7 +79,14 @@ async function getNextSituation() {
   loadSituation();
 }
 
-async function startGame() {
+async function startGame(event) {
+  event.preventDefault();
+
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('final').style.display = 'none';
+  document.getElementById('game').style.display = 'block';
+
+
   let t=0;
   let max_t = 7;
   let situation = null;
