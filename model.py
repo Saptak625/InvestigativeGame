@@ -10,14 +10,14 @@ class Situation:
         self.options.append((optionName, option))
 
     def run(self, **kwargs):
+        if len(self.options) == 0: # Check if won or dead.
+            return
         if kwargs['max_t'] <= kwargs['t']:
             print('Congratulations! Through your tactical decisions and a bit of luck, you have survived till the end of World War II. You are a completely changed person from the beginning of the war, and must find a way to thrive in this new world. Best of luck moving forward!')
             return
         else:
             print(f'Decision {kwargs["t"]}:')
-        print(self.description)
-        if len(self.options) == 0:
-            return
+            print(self.description)
         # print('What do you do?')
         for i in range(len(self.options)):
             print(f'{i+1}: {self.options[i][0]}')
