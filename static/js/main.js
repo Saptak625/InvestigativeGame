@@ -1,29 +1,55 @@
 // Determine what section to show
 let url = window.location.search;
 
-if (localStorage.length > 0) {
+if (localStorage.length == 0) {
+    document.getElementById('game').style.display = 'none';
+    document.getElementById('final').style.display = 'none';
+} else {
     document.getElementById('landing').style.display = 'none';
     document.getElementById('final').style.display = 'none';
-    const params = new Proxy(new URLSearchParams(url), {
-        get: (searchParams, prop) => searchParams.get(prop),
-    });
-    // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
-    let gridSize = params.grid;
-    let diff = params.diff;
-    let diff_scale = params.diff_scale;
-    let diff_factor = params.diff_factor;
-    let t = params.t;
+    loadSituation();
+}
 
-    startGame(gridSize, diff, diff_scale, diff_factor, t);
-} else {
-    document.getElementById('game').style.display = 'none';
-    document.getElementById('game_grid').style.display = 'none';
-    document.getElementById('final').style.display = 'none';
+async function loadSituation() {
+  // Update index.html
+  document.getElementById('name').innerHTML = localStorage.getItem('name');
+  document.getElementById('turn').innerHTML = localStorage.getItem('t');
+  document.getElementById('description').innerHTML = localStorage.getItem('desc');
+
+  // Iterate through all bookings and create cards for each
+  let cards = "";
+  let options = localStorage.getItem('options');
+  // Split string into array by commas
+  options = options.split(',');
+  // console.log('h',options,'h');
+  // Remove all empty strings
+  options = options.filter((option) => option != '');
+  options.forEach((option) => {
+      cards += `
+      <div class="form-control">
+        <label class="label cursor-pointer">
+          <span class="label-text">${option}</span> 
+          <input type="radio" name="radio-10" class="radio" required />
+        </label>
+      </div>
+      `;
+  });
+
+  document.getElementById("options").innerHTML = cards;
+
+  if (options.length == 0) {
+    // document.getElementById('game').style.display = 'none';
+    // Add restartGame as action for form
+    document.getElementById('gameForm').addEventListener('submit', restartGame); 
+    document.getElementById('submitDecision').value = 'Restart Game';
+  }
 }
 
 async function getNextSituation() {
   let t = localStorage.getItem('t');
+  let max_t = localStorage.getItem('max_t');
   let situation = localStorage.getItem('situation');
+  let decision = localStorage.getItem('decision');
 
   // Send request to server api/run
   let r = await fetch('/api/run', {
@@ -31,28 +57,33 @@ async function getNextSituation() {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({t, situation}),
+    body: JSON.stringify({t, max_t, situation, decision}),
   });
   let resp = await r.json();
   console.log(resp);
 
-  // Update index.html
-  document.getElementById('name').innerHTML = resp['situation']['name'];
-  document.getElementById('turn').innerHTML = resp['t'];
-  document.getElementById('description').innerHTML = resp['situation']['description'];
-
   // Update local storage
   localStorage.setItem('t', resp.t);
-  localStorage.setItem('situation', resp.situation);
+  localStorage.setItem('situation', resp.situation.name);
+  localStorage.setItem('decision', null);
+  localStorage.setItem('name', resp.situation.name);
+  localStorage.setItem('desc', resp.desc + resp.situation.description);
+  localStorage.setItem('options', resp.situation.options);
+
+  loadSituation();
 }
 
 async function startGame() {
-  let t=1;
+  let t=0;
+  let max_t = 7;
   let situation = null;
+  let decision = null;
 
   // Add to local storage
-  localStorage.setItem('t', 1);
+  localStorage.setItem('t', t);
+  localStorage.setItem('max_t', max_t);
   localStorage.setItem('situation', situation);
+  localStorage.setItem('decision', decision);
 
   getNextSituation();
 }
@@ -60,8 +91,24 @@ async function startGame() {
 // Add startGame as action for form
 document.getElementById('startForm').addEventListener('submit', startGame);
 
-async function submitAnswer() {
+async function submitAnswer(event) {
+  event.preventDefault();
+
+  // Get which option was selected
+  let i = 0;
+  document.querySelectorAll('.radio').forEach((radio) => {
+    if (radio.checked) {
+      localStorage.setItem('decision', i);
+    } 
+    i++;
+  });
+  getNextSituation();
 }
 
 // Add submitAnswer as action for form
 document.getElementById('gameForm').addEventListener('submit', submitAnswer);
+
+async function restartGame() {
+  localStorage.clear();
+  window.location.href = '/';
+}

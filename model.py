@@ -9,19 +9,20 @@ class Situation:
     def add_option(self, optionName, option):
         self.options.append((optionName, option))
 
-    def run(self, **kwargs):
+    def run(self, choice, **kwargs):
+        desc = ''
         if len(self.options) == 0: # Check if won or dead.
             return
         if kwargs['max_t'] <= kwargs['t']:
-            print('Congratulations! Through your tactical decisions and a bit of luck, you have survived till the end of World War II. You are a completely changed person from the beginning of the war, and must find a way to thrive in this new world. Best of luck moving forward!')
-            return
+            desc = 'Congratulations! Through your tactical decisions and a bit of luck, you have survived till the end of World War II. You are a completely changed person from the beginning of the war, and must find a way to thrive in this new world. Best of luck moving forward!'
+            return desc, None
         else:
             print(f'Decision {kwargs["t"]}:')
             print(self.description)
         # print('What do you do?')
-        for i in range(len(self.options)):
-            print(f'{i+1}: {self.options[i][0]}')
-        choice = int(input('Choice: ')) - 1
+        # for i in range(len(self.options)):
+        #     print(f'{i+1}: {self.options[i][0]}')
+        # choice = int(input('Choice: ')) - 1
         print()
         desc, decisionResult = self.options[choice][1].run(**kwargs)
         print(desc)
@@ -29,7 +30,8 @@ class Situation:
         # Increment t in kwargs
         kwargs['t'] += 1
         # print(kwargs)
-        decisionResult.run(**kwargs)
+        return desc, decisionResult
+        # decisionResult.run(**kwargs)
 
     def __str__(self):
         return self.name
@@ -117,4 +119,4 @@ if __name__ == '__main__':
     start.add_option('Right', right)
 
     # Run the game
-    start.run()
+    # start.run()

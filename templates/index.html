@@ -29,20 +29,23 @@
         <h3 class="text-1xl mb-3"><span id="description" class="pl-1 justify-left text-left">xyz</span></h3>
         <form class="flex justify-center" id="gameForm">
           <div class="w-full max-w-xs">
-            <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text">Red pill</span> 
-                <input type="radio" name="radio-10" class="radio checked:bg-red-500" checked />
-              </label>
+            <div id="options">
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Red pill</span> 
+                  <input type="radio" name="radio-10" class="radio" required />
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text">Blue pill</span> 
+                  <input type="radio" name="radio-10" class="radio" required />
+                </label>
+              </div>
             </div>
             <div class="form-control">
-              <label class="label cursor-pointer">
-                <span class="label-text">Blue pill</span> 
-                <input type="radio" name="radio-10" class="radio checked:bg-blue-500" checked />
-              </label>
-            </div>
-            <div class="form-control">
-              <input type="submit" class="btn btn-primary mt-6" value="Submit"></input>
+              <input type="submit" class="btn btn-primary mt-6" value="Submit" id="submitDecision"></input>
+              <!-- <input type="submit" class="btn btn-primary mt-6" value="Restart Game" id="restartGame" style="display: none;"></input> -->
             </div>
           </div>
         </form>

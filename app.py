@@ -16,17 +16,21 @@ def form():
     if request.method == 'POST':
         # Get data from js.
         data = request.get_json()
-        t = data['t']
+        t = int(data['t'])
+        max_t = int(data['max_t'])
         situation = data['situation']
         if situation == 'null':
             situation = get_all_situations()[0]
         else:
-            pass
+            decision = int(data['decision'])
+            situation = [i for i in get_all_situations() if i.name == situation][0]
+            desc, new = situation.run(decision, t=t, max_t=max_t)
+            return jsonify({'t': t+1, 'situation': new.to_dict(), 'desc': desc})
         
         print(situation)
 
         # Return data to js.
-        return jsonify({'t': t, 'situation': situation.to_dict()})
+        return jsonify({'t': t+1, 'situation': situation.to_dict(), 'desc': ''})
 
 
 if __name__ == '__main__':
