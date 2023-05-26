@@ -1,6 +1,6 @@
 from model import Situation as S, Decision as D, RandomDecision as RD
 t=1
-max_t = 10
+max_t = 7
 
 # Full Game.
 # Nodes
@@ -69,14 +69,14 @@ escape_pow_rd = RD((lambda **kwargs: 50 * (0.95)**kwargs["t"], 'You have success
 
 help_pows_rd = RD((lambda **kwargs: 35 * (0.9)**kwargs["t"], 'Deciding to serve the poor prisoners of war, you decide to embark on the risky task of helping other prisoners of war escape. Over time, you help a multitude of soldiers escape.', escape_pow_sucess), (lambda **kwargs: 100 - (35 * (0.9)**kwargs["t"]), 'You were caught while trying to rescue other PoWs. You are sent to a concentration camp.', concentration_camp))
 
-apply_immigration_rd = RD((lambda **kwargs: 40 * (0.9)**kwargs["t"], 'Henri Guisan has accepted you as a refugee! Congratulations. Enjoy your life.', wait_war_allied), (lambda **kwargs: 100 - (40 * (0.9)**kwargs["t"]), 'Guisan does not want you. Too bad, so sad.', immigrate_reject))
+apply_immigration_rd = RD((lambda **kwargs: 40 * (0.9)**kwargs["t"], '', wait_war_allied), (lambda **kwargs: 100 - (40 * (0.9)**kwargs["t"]), '', immigrate_reject))
 
-sent_back_rd = RD((lambda **kwargs: 55 * (0.9)**kwargs["t"], 'You have been sent back to Poland and are now forced to fight in the war. Ready up soldier', fight_war), (lambda **kwargs: 100 - (55 * (0.9)**kwargs["t"]), 'Stopped by Nazi Soldiers', 'You are stopped by a group of Nazi soldiers, who ask you for identification. What happens to you?', stopped_nazi_2))
+sent_back_rd = RD((lambda **kwargs: 55 * (0.9)**kwargs["t"], 'You have been sent back to Poland and are now forced to fight in the war. Ready up soldier', fight_war), (lambda **kwargs: 100 - (55 * (0.9)**kwargs["t"]), '', stopped_nazi_2))
 
 stopped_nazi_2_rd = RD((lambda **kwargs: 10 * (1.05)**kwargs["t"], 'The soldier realizes that the papers are fake, and you are sent to be immediately executed', executed), (lambda **kwargs: 0.65*(100 - (10 * (1.05)**kwargs["t"])), 'The soldier realizes that the papers are fake, and you are sent a concentration camp.', concentration_camp), (lambda **kwargs: 0.35*(100 - (10 * (1.05)**kwargs["t"])), 'The soldiers let you pass without suspecting you. What do you do?', find_family))
 
 escape_concentration_rd = RD((lambda **kwargs: 35 * (0.8)**kwargs["t"], 'Fortunately, you are able to make it out of the concentration camp. You are finally free!', escape), (lambda **kwargs: 0.9*(100 - (35 * (0.8)**kwargs["t"])), 'You are caught attempting to escape from concentration camp. You are gassed next morning.', executed), (lambda **kwargs: 0.1*(100 - (35 * (0.8)**kwargs["t"])), 'You are caught attempting to escape from concentration camp. You miraculously find allied troops!', rescued_allies))
-continue_concentration_rd = RD((75, 'You are another dreaded week closer to your execution. Your time is running out...', concentration_camp), (10, 'You make some friends with fellow prisoners in the concentration camp.', concentration_camp), (10, 'Unfortunately, you are sent to get gassed', executed), (5, 'You are able to make friends with a guard at the concentration camp, who you think might be able to help you in the future.', guard_friend))
+continue_concentration_rd = RD((75, 'You are another dreaded week closer to your execution. Your time is running out...', concentration_camp), (10, 'You make some friends with fellow prisoners in the concentration camp.', concentration_camp), (10, 'Unfortunately, you are sent to get gassed.', executed), (5, 'You are able to make friends with a guard at the concentration camp, who you think might be able to help you in the future.', guard_friend))
 
 guard_rd = RD((lambda **kwargs: 50 * (0.9)**kwargs["t"], 'You are able to convince the guard to help you escape.', escape), (lambda **kwargs: 100 - (50 * (0.9)**kwargs["t"]), 'The guard does not help you escape and instead reports you, and you will be immediately executed.', executed))
 ignore_guard_d = D(concentration_camp, desc='You ignore your friendship with the guard and continue to wait for your execution.')
@@ -124,6 +124,8 @@ visit_wife.add_option('You decide to abandon your wife and flee the country for 
 
 immigrate_allied.add_option('Find Family', find_family_d)
 immigrate_allied.add_option('Apply for Immigration', apply_immigration_rd)
+
+immigrate_reject.add_option('Continue', sent_back_rd)
 
 stopped_nazi_2.add_option('Continue', stopped_nazi_2_rd)
 
