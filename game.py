@@ -71,7 +71,7 @@ help_pows_rd = RD((lambda **kwargs: 35 * (0.9)**kwargs["t"], 'Deciding to serve 
 
 apply_immigration_rd = RD((lambda **kwargs: 40 * (0.9)**kwargs["t"], 'Henri Guisan has accepted you as a refugee! Congratulations. Enjoy your life.', wait_war_allied), (lambda **kwargs: 100 - (40 * (0.9)**kwargs["t"]), 'Guisan does not want you. Too bad, so sad.', immigrate_reject))
 
-sent_back_rd = RD((lambda **kwargs: 55 * (0.9)**kwargs["t"], 'You have been sent back to Poland and are now forced to fight in the war. Ready up soldier', fight_war), (lambda **kwargs: 100 - (55 * (0.9)**kwargs["t"]), 'Guisan does not want you. Too bad, so sad.', immigrate_reject))
+sent_back_rd = RD((lambda **kwargs: 55 * (0.9)**kwargs["t"], 'You have been sent back to Poland and are now forced to fight in the war. Ready up soldier', fight_war), (lambda **kwargs: 100 - (55 * (0.9)**kwargs["t"]), 'Stopped by Nazi Soldiers', 'You are stopped by a group of Nazi soldiers, who ask you for identification. What happens to you?', stopped_nazi_2))
 
 stopped_nazi_2_rd = RD((lambda **kwargs: 10 * (1.05)**kwargs["t"], 'The soldier realizes that the papers are fake, and you are sent to be immediately executed', executed), (lambda **kwargs: 0.65*(100 - (10 * (1.05)**kwargs["t"])), 'The soldier realizes that the papers are fake, and you are sent a concentration camp.', concentration_camp), (lambda **kwargs: 0.35*(100 - (10 * (1.05)**kwargs["t"])), 'The soldiers let you pass without suspecting you. What do you do?', find_family))
 
@@ -151,4 +151,6 @@ family_intact.add_option('Protect Family in Hiding', protect_family_rd)
 neighbors_executed.add_option('Continue', neighbors_executed_rd)
 
 # Run the game
+print('============================Choose Your Own Adventure: Maus============================')
+print('Directions: You must navigate chaotic World War II. Enter the number for your decision when prompted by the game.\n')
 start.run(t=t, max_t=max_t)
