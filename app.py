@@ -23,11 +23,12 @@ def form():
             situation = get_all_situations()[0]
         else:
             decision = int(data['decision'])
+            print(f'_{situation}_')
             situation = [i for i in get_all_situations() if i.name == situation][0]
             desc, new = situation.run(decision, t=t, max_t=max_t)
             return jsonify({'t': t+1, 'situation': new.to_dict(), 'desc': desc})
         
-        print(situation)
+        print(f'_{situation}_')
 
         # Return data to js.
         return jsonify({'t': t+1, 'situation': situation.to_dict(), 'desc': ''})

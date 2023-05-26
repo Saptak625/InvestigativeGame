@@ -159,4 +159,4 @@ neighbors_executed.add_option('Continue', neighbors_executed_rd)
 
 # List of situations
 def get_all_situations():
-    return [start, fight_war, killed_war, defect, visit_wife, stopped_nazi, find_family, hiding_solitary, concentration_camp, executed, real_papers, PoW, rescued_allies, escape_pow_sucess, immigrate_reject, wait_war_allied, stopped_nazi_2, guard_friend, escape, find_family_success, keep_family_together, lose_grandparents, family_intact, kids_executed, neighbors_executed]
+    return [start, fight_war, killed_war, defect, visit_wife, stopped_nazi, find_family, hiding_solitary, concentration_camp, executed, real_papers, PoW, rescued_allies, escape_pow_sucess, immigrate_allied, immigrate_reject, wait_war_allied, stopped_nazi_2, guard_friend, escape, find_family_success, keep_family_together, lose_grandparents, family_intact, kids_executed, neighbors_executed]
