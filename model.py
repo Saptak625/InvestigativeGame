@@ -10,17 +10,25 @@ class Situation:
         self.options.append((optionName, option))
 
     def run(self, **kwargs):
+        if kwargs['max_t'] <= kwargs['t']:
+            print('Congratulations! Through your tactical decisions and a bit of luck, you have survived till the end of the World War II. You are a completely changed person from the beginning of the war.$$')
+            return
+        else:
+            print(f'Decision {kwargs["t"]}:')
         print(self.description)
         if len(self.options) == 0:
             return
         # print('What do you do?')
         for i in range(len(self.options)):
             print(f'{i+1}: {self.options[i][0]}')
-        choice = int(input()) - 1
+        choice = int(input('Choice: ')) - 1
         print()
         desc, decisionResult = self.options[choice][1].run(**kwargs)
         print(desc)
-        print('Result: ', decisionResult)
+        # print('Result: ', decisionResult)
+        # Increment t in kwargs
+        kwargs['t'] += 1
+        # print(kwargs)
         decisionResult.run(**kwargs)
 
     def __str__(self):

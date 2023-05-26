@@ -1,5 +1,6 @@
 from model import Situation as S, Decision as D, RandomDecision as RD
 t=1
+max_t = 10
 
 # Full Game.
 # Nodes
@@ -11,16 +12,16 @@ killed_war = S('Killed in War', 'Unfortunately, you were killed in war. Those cl
 defect = S('Defect', 'You spend a few days scouring the site for openings and ultimately decide to try your hand at escaping. What heppens?')
 
 visit_wife = S('Visit Wife', 'You have decided to attempt visiting your wife in Poland')
-stopped_nazi = S('Stopped by Nazi Soldiers', 'You are stopped by a group of nazi soldiers, who ask you for identification. What happens to you?')
+stopped_nazi = S('Stopped by Nazi Soldiers', 'You are stopped by a group of Nazi soldiers, who ask you for identification. What happens to you?')
 
 find_family = S('Find Family', 'You attempt to find your family in Poland. What happens to you?')
 hiding_solitary = S('Hiding Solitary', 'You decide it is best to hide in solitary until it is safe enough to move freely.')
 
 concentration_camp = S('Concentration Camp', 'You have been sent to a concentration camp, where the chances of survival are slim. Do you have what it takes to survive?')
 
-executed = S('Executed', 'Unfortunately, you are executed by the nazis. You never live past the war, and are never able to build a family. Those close to you are extremely traumatized by your death, even years after the war.')
+executed = S('Executed', 'Unfortunately, you are executed by the Nazis. You never live past the war, and are never able to build a family. Those close to you are extremely traumatized by your death, even years after the war.')
 
-real_papers = S('Real Papers', 'You decide to get registered and show real papers to the nazis ')
+real_papers = S('Real Papers', 'You decide to get registered and show real papers to the Nazis.')
 PoW = S('Prisoner of War', 'During your time in the army, you get captured by the Germans and are now a prisoner of war')
 
 rescued_allies = S('Rescued by Allies', 'Luckily, a group of allied soldiers infiltrate the imprisonment site and rescue you. You have been taken back to the allied soldiers’ base and live a good life')
@@ -31,7 +32,7 @@ immigrate_allied = S('Immigrate to Allied Country', 'Henri Guisan has accepted y
 immigrate_reject = S('Immigration Rejected', 'Guisan does not want you. Too bad, so sad.')
 wait_war_allied = S('Wait for War to End in Allied Country', 'You are able to settle in Switzerland and live a happy life with your family. Now, you just sit back and wait until the war ends.')
 
-stopped_nazi_2 = S('Stopped by Nazi Soldiers while returning to Poland', 'You are stopped by a group of nazi soldiers, who ask you for identification. What happens to you?')
+stopped_nazi_2 = S('Stopped by Nazi Soldiers while returning to Poland', 'You are stopped by a group of Nazi soldiers, who ask you for identification. What happens to you?')
 
 guard_friend = S('Befriend Guard', 'You are able to make friends with a guard, who you think might be able to help you in the future.')
 
@@ -48,7 +49,7 @@ neighbors_executed = S('Neighbors Executed', 'Your neighbors are unfortunately e
 
 # Decisions/Edges
 flee_rd = RD((lambda **kwargs: 80 * (0.7)**kwargs["t"], 'You are able to successfully make it safely to the border of an allied country. You are approached by a border patrol agent. What happens to you?', immigrate_allied), (lambda **kwargs: 100 - (80 * (0.7)**kwargs["t"]), 'You have been caught by the Nazis on your mission to flee the country. You have been taken back to mainland Germany, specifically the Flossenburg concentration camp.', concentration_camp))
-wife_rd = RD((40, 'Visit wife in hospital. You have successfully reached your wife and reconnect with her in the hospital.', visit_wife), (35, 'Caught by Polish government for evading draft. You have been captured and held in hostage by the Polish government for evading the draft', fight_war), (25, 'Stopped by Nazi soldiers. You are stopped by a group of nazi soldiers, who ask you for identification. What happens to you?', stopped_nazi))
+wife_rd = RD((40, 'Visit wife in hospital. You have successfully reached your wife and reconnect with her in the hospital.', visit_wife), (35, 'Caught by Polish government for evading draft. You have been captured and held in hostage by the Polish government for evading the draft', fight_war), (25, 'Stopped by Nazi soldiers. You are stopped by a group of Nazi soldiers, who ask you for identification. What happens to you?', stopped_nazi))
 fight_war_d = D(fight_war)
 
 defect_d = D(defect)
@@ -61,7 +62,7 @@ continue_hiding_solitary_rd = RD((lambda **kwargs: 35 * (1.05)**kwargs["t"], 'Yo
 fake_papers_rd = RD((lambda **kwargs: 20 * (1.05)**kwargs["t"], 'The soldier realizes that the papers are fake, and you are sent to be immediately executed', executed), (lambda **kwargs: 100 - (20 * (1.05)**kwargs["t"]), 'The soldiers let you pass without suspecting you. What do you do?', visit_wife))
 real_papers_d = D(real_papers)
 
-house_seized_d = D(concentration_camp, desc='Your house was seized for redistricting reasons. You wear relocated to a Labor Camp.')
+house_seized_d = D(concentration_camp, desc='Your house was seized for redistricting reasons. You were relocated to a Labor Camp.')
 
 face_fate_rd = RD((lambda **kwargs: 35 * (0.9)**kwargs["t"], 'Luckily, a group of allied soldiers infiltrate the imprisonment site and rescue. You have been taken back to the allied soldiers’ base and live a good life', rescued_allies), (lambda **kwargs: 0.2 * (100 - (35 * (0.9)**kwargs["t"])), 'After a couple of days, you become executed alongside the other prisoners of war', executed), (lambda **kwargs: 0.8 * (100 - (35 * (0.9)**kwargs["t"])), 'Days keep passing as you face your fate in the imprisonment site. You await a fearless, god-sent soldier to come and save you', PoW))
 escape_pow_rd = RD((lambda **kwargs: 50 * (0.95)**kwargs["t"], 'You have successfully escaped imprisonment! CONGRATULATIONS Soldier!', escape_pow_sucess), (lambda **kwargs: 100 - (50 * (0.95)**kwargs["t"]), 'Unfortunately, you were unable to escape. Soldiers found you and alerted their leader Hitler. It has been ordered that you are transported to Auscwhitz instantly with maximum security detail', concentration_camp))
@@ -81,14 +82,14 @@ guard_rd = RD((lambda **kwargs: 50 * (0.9)**kwargs["t"], 'You are able to convin
 ignore_guard_d = D(concentration_camp, desc='You ignore your friendship with the guard and continue to wait for your execution.')
 
 send_kids_countryside_rd = RD((lambda **kwargs: 45 * (0.9)**kwargs["t"], 'Fortunately, the kids survive, and you get them back.', keep_family_together), (lambda **kwargs: 100 - (45 * (0.9)**kwargs["t"]), 'Your kids are unfortunately executed, which leaves you with an intense amount of guilt and depression, even years after the war.', kids_executed))
-give_kids_neighbors_rd = RD((lambda **kwargs: 15 * (1.05)**kwargs["t"], 'Neighbors taken to concentration camp$$.', keep_family_together), (lambda **kwargs: 0.65 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids survived with your neighbors.$$', keep_family_together), (lambda **kwargs: 0.35 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids are killed by neighbors when they find out that they will be sent to Auschwitz.$$', kids_executed))
+give_kids_neighbors_rd = RD((lambda **kwargs: 15 * (1.05)**kwargs["t"], 'Your Neighbors have been taken to a concentration camp. Their lives and ', keep_family_together), (lambda **kwargs: 0.65 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids survived with your neighbors.$$', keep_family_together), (lambda **kwargs: 0.35 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids are killed by neighbors when they find out that they will be sent to Auschwitz. Sorry for your loss bud.', kids_executed))
 keep_family_together_d = D(keep_family_together)
 
 find_family_rd = RD((lambda **kwargs: 65 * (0.9)**kwargs["t"], 'You are able to successfully find your family.', find_family_success), (lambda **kwargs: 100 - (65 * (0.9)**kwargs["t"]), 'You are caught by Nazis before you find your family. You are sent to a concentration camp.', concentration_camp))
 
 protect_family_rd = RD((60, 'One of your family members is caught, and they are taken to a concentration camp without you.', family_intact), (15, 'Your entire family is caught, and taken to concentration camp', concentration_camp), (25, 'You are caught, and taken to concentration camp.', concentration_camp))
 
-neighbors_executed_rd = RD((lambda **kwargs: 40 * (1.05)**kwargs["t"], 'Kids are taken to concentration camp as well and are executed$$.', kids_executed), (lambda **kwargs: 100 - (40 * (1.05)**kwargs["t"]), 'Your children are alive and you reunite with them!$$', keep_family_together))
+neighbors_executed_rd = RD((lambda **kwargs: 40 * (1.05)**kwargs["t"], 'Kids are taken to concentration camp as well and are executed. Sorry for your loss bud.', kids_executed), (lambda **kwargs: 100 - (40 * (1.05)**kwargs["t"]), 'Your children are alive and you reunite with them!', keep_family_together))
 
 # Add decisions to nodes
 start.add_option('Flee Country', flee_rd)
@@ -150,4 +151,4 @@ family_intact.add_option('Protect Family in Hiding', protect_family_rd)
 neighbors_executed.add_option('Continue', neighbors_executed_rd)
 
 # Run the game
-start.run(t=t)
+start.run(t=t, max_t=max_t)
