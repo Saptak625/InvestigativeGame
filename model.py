@@ -36,6 +36,13 @@ class Situation:
     
     def __repr__(self):
         return self.name
+    
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'options': [i for i, _ in self.options]
+        }
 
 
 class Decision:
@@ -51,6 +58,12 @@ class Decision:
     
     def __repr__(self):
         return self.options
+    
+    def to_dict(self):
+        return {
+            'options': self.options,
+            'desc': self.desc
+        }
 
 
 class RandomDecision(Decision):
@@ -86,7 +99,6 @@ class RandomDecision(Decision):
         for i in range(len(self.probabilities)):
             if random_number < self.probabilities[i]:
                 return self.options[i][1], self.options[i][2]
-
 
 if __name__ == '__main__':
     # A simple graph with 4 nodes, 3 edges, and 2 decisions, one of which is random.

@@ -1,10 +1,10 @@
 from model import Situation as S, Decision as D, RandomDecision as RD
-t=1
-max_t = 7
+# t=1
+# max_t = 7
 
 # Full Game.
 # Nodes
-start = S('start', 'You are working in a factory in Poland before the start of WWII. Germany invades, marking the start of the war. You get a letter from the government that says that you have been drafted to fight in the war. While this is happening, your wife is admitted to a mental hospital. What do you do?')
+start = S('Start', 'You are working in a factory in Poland before the start of WWII. Germany invades, marking the start of the war. You get a letter from the government that says that you have been drafted to fight in the war. While this is happening, your wife is admitted to a mental hospital. What do you do?')
 
 fight_war = S('Fight War', 'You join the army to fight in the war for Poland. You go through a few weeks of training, and then are put on the frontline of the war. You fight in the Battle of Westerplatte against the Germans. What happens to you?')
 
@@ -153,6 +153,10 @@ family_intact.add_option('Protect Family in Hiding', protect_family_rd)
 neighbors_executed.add_option('Continue', neighbors_executed_rd)
 
 # Run the game
-print('============================Choose Your Own Adventure: Maus============================')
-print('Directions: You must navigate chaotic World War II. Enter the number for your decision when prompted by the game.\n')
-start.run(t=t, max_t=max_t)
+# print('============================Choose Your Own Adventure: Maus============================')
+# print('Directions: You must navigate chaotic World War II. Enter the number for your decision when prompted by the game.\n')
+# start.run(t=t, max_t=max_t)
+
+# List of situations
+def get_all_situations():
+    return [start, fight_war, killed_war, defect, visit_wife, stopped_nazi, find_family, hiding_solitary, concentration_camp, executed, real_papers, PoW, rescued_allies, escape_pow_sucess, immigrate_reject, wait_war_allied, stopped_nazi_2, guard_friend, escape, find_family_success, keep_family_together, lose_grandparents, family_intact, kids_executed, neighbors_executed]
