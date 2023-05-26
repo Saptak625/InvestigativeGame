@@ -13,7 +13,7 @@ class Situation:
         print(self.description)
         if len(self.options) == 0:
             return
-        print('What do you do?')
+        # print('What do you do?')
         for i in range(len(self.options)):
             print(f'{i+1}: {self.options[i][0]}')
         choice = int(input()) - 1
