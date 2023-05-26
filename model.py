@@ -11,7 +11,7 @@ class Situation:
 
     def run(self, **kwargs):
         if kwargs['max_t'] <= kwargs['t']:
-            print('Congratulations! Through your tactical decisions and a bit of luck, you have survived till the end of the World War II. You are a completely changed person from the beginning of the war.$$')
+            print('Congratulations! Through your tactical decisions and a bit of luck, you have survived till the end of World War II. You are a completely changed person from the beginning of the war, and must find a way to thrive in this new world. Best of luck moving forward!')
             return
         else:
             print(f'Decision {kwargs["t"]}:')

@@ -45,7 +45,7 @@ family_intact = S('Protect Your Family', 'You decide to protect your family by t
 
 kids_executed = S('Kids are Executed', 'Your kids are unfortunately executed, which leaves you with an intense amount of guilt and depression, even years after the war.')
 
-neighbors_executed = S('Neighbors Executed', 'Your neighbors are unfortunately executed, which leaves you with an intense amount of guilt and depression, even years after the war. You still do not know where your kids are.$$')
+neighbors_executed = S('Neighbors Executed', 'Your neighbors are unfortunately executed, which leaves you with an intense amount of guilt and depression, even years after the war. You still do not know where your kids are.')
 
 # Decisions/Edges
 flee_rd = RD((lambda **kwargs: 80 * (0.7)**kwargs["t"], 'You are able to successfully make it safely to the border of an allied country. You are approached by a border patrol agent. What happens to you?', immigrate_allied), (lambda **kwargs: 100 - (80 * (0.7)**kwargs["t"]), 'You have been caught by the Nazis on your mission to flee the country. You have been taken back to mainland Germany, specifically the Flossenburg concentration camp.', concentration_camp))
@@ -82,7 +82,7 @@ guard_rd = RD((lambda **kwargs: 50 * (0.9)**kwargs["t"], 'You are able to convin
 ignore_guard_d = D(concentration_camp, desc='You ignore your friendship with the guard and continue to wait for your execution.')
 
 send_kids_countryside_rd = RD((lambda **kwargs: 45 * (0.9)**kwargs["t"], 'Fortunately, the kids survive, and you get them back.', keep_family_together), (lambda **kwargs: 100 - (45 * (0.9)**kwargs["t"]), 'Your kids are unfortunately executed, which leaves you with an intense amount of guilt and depression, even years after the war.', kids_executed))
-give_kids_neighbors_rd = RD((lambda **kwargs: 15 * (1.05)**kwargs["t"], 'Your Neighbors have been taken to a concentration camp. Their lives and ', keep_family_together), (lambda **kwargs: 0.65 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids survived with your neighbors.$$', keep_family_together), (lambda **kwargs: 0.35 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids are killed by neighbors when they find out that they will be sent to Auschwitz. Sorry for your loss bud.', kids_executed))
+give_kids_neighbors_rd = RD((lambda **kwargs: 15 * (1.05)**kwargs["t"], 'Your Neighbors have been taken to a concentration camp. Their survival is under significant question.', keep_family_together), (lambda **kwargs: 0.65 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids survived with your neighbors. Congratulations.', keep_family_together), (lambda **kwargs: 0.35 * (100 - (15 * (0.9)**kwargs["t"])), 'Kids are killed by neighbors when they find out that they will be sent to Auschwitz. Sorry for your loss bud.', kids_executed))
 keep_family_together_d = D(keep_family_together)
 
 find_family_rd = RD((lambda **kwargs: 65 * (0.9)**kwargs["t"], 'You are able to successfully find your family.', find_family_success), (lambda **kwargs: 100 - (65 * (0.9)**kwargs["t"]), 'You are caught by Nazis before you find your family. You are sent to a concentration camp.', concentration_camp))
