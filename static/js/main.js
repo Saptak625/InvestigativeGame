@@ -60,15 +60,21 @@ async function getNextSituation() {
     body: JSON.stringify({t, max_t, situation, decision}),
   });
   let resp = await r.json();
-  // console.log(resp);
+  console.log(resp);
 
   // Update local storage
   localStorage.setItem('t', resp.t);
-  localStorage.setItem('situation', resp.situation.name);
   localStorage.setItem('decision', null);
-  localStorage.setItem('name', resp.situation.name);
-  localStorage.setItem('desc', resp.desc + ' ' + resp.situation.description);
-  localStorage.setItem('options', resp.situation.options);
+  if (resp.situation !== null) {
+    localStorage.setItem('situation', resp.situation.name);
+    localStorage.setItem('name', resp.situation.name);
+    localStorage.setItem('desc', resp.desc + ' ' + resp.situation.description);
+    localStorage.setItem('options', resp.situation.options);
+  } else {
+    localStorage.setItem('name', 'Survived WWII');
+    localStorage.setItem('desc', resp.desc);
+    localStorage.setItem('options', '');
+  }
 
   loadSituation();
 }
